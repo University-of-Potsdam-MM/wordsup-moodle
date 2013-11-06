@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/term/db" VERSION="20130116" COMMENT="XMLDB file for Moodle mod/term"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="term" COMMENT="Available terms are stored here" NEXT="term_terms">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="course"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" PREVIOUS="course" NEXT="dbname"/>
+		<FIELD NAME="dbname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="name" NEXT="intro"/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="true" SEQUENCE="false" PREVIOUS="dbname" NEXT="introformat"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="intro" NEXT="timemodified"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="introformat"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="term_terms" COMMENT="term_terms table retrofitted from MySQL" PREVIOUS="term" NEXT="term_topics">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="term"/>
+        <FIELD NAME="term" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="id" NEXT="badword1"/>
+        <FIELD NAME="badword1" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="term" NEXT="badword2"/>
+        <FIELD NAME="badword2" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="badword1" NEXT="badword3"/>
+        <FIELD NAME="badword3" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="badword2" NEXT="badword4"/>
+        <FIELD NAME="badword4" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="badword3" NEXT="badword5"/>
+        <FIELD NAME="badword5" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="badword4" NEXT="level"/>
+        <FIELD NAME="level" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="badword5" NEXT="lookuplink"/>
+        <FIELD NAME="lookuplink" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="level" NEXT="lastedit"/>
+        <FIELD NAME="lastedit" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="lookuplink" NEXT="author"/>
+        <FIELD NAME="author" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="lastedit"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="term_topics" COMMENT="term_topics table retrofitted from MySQL" PREVIOUS="term_terms" NEXT="term_subtopics">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="topicname"/>
+        <FIELD NAME="topicname" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="id" NEXT="lastedit"/>
+        <FIELD NAME="lastedit" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="topicname" NEXT="author"/>
+        <FIELD NAME="author" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="lastedit"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="term_subtopics" COMMENT="term_subtopics table retrofitted from MySQL" PREVIOUS="term_topics" NEXT="term_topicmappers">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="subtopicname"/>
+        <FIELD NAME="subtopicname" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" PREVIOUS="id" NEXT="topicid"/>
+        <FIELD NAME="topicid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="subtopicname" NEXT="reference1"/>
+        <FIELD NAME="reference1" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="topicid" NEXT="reference2"/>
+        <FIELD NAME="reference2" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="reference1" NEXT="reference3"/>
+        <FIELD NAME="reference3" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="reference2" NEXT="lastedit"/>
+        <FIELD NAME="lastedit" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="reference3" NEXT="author"/>
+        <FIELD NAME="author" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="lastedit"/>
+      </FIELDS>
+	  <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="term_topicmappers" COMMENT="term_topicmappers table retrofitted from MySQL" PREVIOUS="term_subtopics">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="termid"/>
+        <FIELD NAME="termid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="subtopicid"/>
+        <FIELD NAME="subtopicid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" PREVIOUS="termid" NEXT="lastedit"/>
+        <FIELD NAME="lastedit" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="subtopicid" NEXT="author"/>
+        <FIELD NAME="author" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="lastedit"/>
+      </FIELDS>
+	  <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
